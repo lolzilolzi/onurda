@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Gelen Mesajlar</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .clock-container {
+      text-align: right;
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="clock-container" id="saat"></div>
+    <h2>📬 Onur’a Gelen Mesajlar</h2>
+    <div id="mesajlar"><p>Henüz mesaj yok.</p></div>
+  </div>
+
+  <script>
+    function guncelleSaat() {
+      const saatKutu = document.getElementById("saat");
+      const simdi = new Date();
+      const tarih = simdi.toLocaleDateString("tr-TR");
+      const saat = simdi.toLocaleTimeString("tr-TR");
+      saatKutu.innerText = tarih + " " + saat;
+    }
+    setInterval(guncelleSaat, 1000);
+    guncelleSaat();
+  </script>
+</body>
+</html>

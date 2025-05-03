@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Gelen Mesajlar</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .clock-container {
+      text-align: right;
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 10px;
+    }
+    .confetti {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      animation: fall linear infinite;
+      z-index: 9999;
+      border-radius: 50%;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="clock-container" id="saat"></div>
+    <h2>🦦Happy Birthday.Love u girl🦦</h2>
+
+    <div id="login">
+      <input type="password" id="password" placeholder="Şifre girin">
+      <button onclick="checkPassword()">Giriş Yap</button>
+    </div>
+
+    <div id="mesajlar" style="display:none;"><p>Henüz mesaj yok.</p></div>
+  </div>
+
+  <script>
+    function guncelleSaat() {
+      const saatKutu = document.getElementById("saat");
+      const simdi = new Date();
+      const tarih = simdi.toLocaleDateString("tr-TR");
+      const saat = simdi.toLocaleTimeString("tr-TR");
+      saatKutu.innerText = tarih + " " + saat;
+    }
+    setInterval(guncelleSaat, 1000);
+    guncelleSaat();
+
+    function checkPassword() {
+      const pw = document.getElementById("password").value;
+      if (pw === "myshayla22") {
+        document.getElementById("login").style.display = "none";
+        document.getElementById("mesajlar").style.display = "block";
+        startConfetti();
+        fetchMessages();
+      } else {
+        alert("❌ Hatalı şifre.");
+      }
+    }
+
+    async function fetchMessages() {
+      const res = await fetch("/api/messages");
+      const data = await res.json();
+      const container = document.getElementById("mesajlar");
+      container.innerHTML = "";
+
+      if (!data.length) {
+        container.innerHTML = "<p>Henüz mesaj yok.</p>";
+        return;
+      }
+
+      data.forEach(msg => {
+        const p = document.createElement("p");
+        p.innerHTML = `💌 <strong>${msg.ad}</strong>: ${msg.mesaj}`;
+        container.appendChild(p);
+      });
+    }
+
+    function startConfetti() {
+      for (let i = 0; i < 100; i++) {
+        const c = document.createElement("div");
+        c.classList.add("confetti");
+        c.style.left = Math.random() * 100 + "vw";
+        c.style.top = Math.random() * -100 + "vh";
+        c.style.animationDuration = 3 + Math.random() * 4 + "s";
+        c.style.animationDelay = Math.random() * 5 + "s";
+        c.style.backgroundColor = ['#ff4d4d', '#ff9999', '#ff1a1a', '#cc0000'][Math.floor(Math.random() * 4)];
+        document.body.appendChild(c);
+        setTimeout(() => c.remove(), 8000);
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Mesaj Gönder</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>💌 Onur'a Mesaj Gönder</h2>
+    <form id="form">
+      <input id="ad" placeholder="Adınız" required><br>
+      <textarea id="mesaj" placeholder="Mesajınız" required></textarea><br>
+      <button type="submit">Gönder</button>
+      <p id="success" style="color: green; display: none;">✔️ Başarıyla gönderildi!</p>
+    </form>
+  </div>
+  <script>
+    document.getElementById("form").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      const ad = document.getElementById("ad").value.trim();
+      const mesaj = document.getElementById("mesaj").value.trim();
+      if (!ad || !mesaj) return;
+      const payload = { ad, mesaj };
+      try {
+        await fetch("/api/messages", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        document.getElementById("form").reset();
+        document.getElementById("success").style.display = "block";
+      } catch (err) {
+        alert("Gönderim hatası.");
+      }
+    });
+  </script>
+</body>
+</html>
